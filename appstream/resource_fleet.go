@@ -1,10 +1,10 @@
-package main
+package appstream
 
 import (
     	"log"
 	"strings"
 	"time"
-    	"github.com/hashicorp/terraform/helper/schema"
+    	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
     	"github.com/aws/aws-sdk-go/aws"
     	"github.com/aws/aws-sdk-go/service/appstream"
 )
