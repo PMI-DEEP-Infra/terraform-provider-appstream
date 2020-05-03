@@ -1,12 +1,12 @@
 package appstream
 
 import (
+        "github.com/aws/aws-sdk-go/aws"
+        "github.com/aws/aws-sdk-go/service/appstream"
+        "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
     	"log"
 	"strings"
 	"time"
-    	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-    	"github.com/aws/aws-sdk-go/aws"
-    	"github.com/aws/aws-sdk-go/service/appstream"
 )
 
 

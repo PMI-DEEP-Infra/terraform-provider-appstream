@@ -1,10 +1,10 @@
 package appstream
 
 import (
-	"log"
-    "github.com/hashicorp/terraform/helper/schema"
+        "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	homedir "github.com/mitchellh/go-homedir"
+	"log"
 )
 
 func Provider() terraform.ResourceProvider {

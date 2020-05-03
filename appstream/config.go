@@ -1,15 +1,14 @@
 package appstream
 
 import (
-	"fmt"
-	"log"
-    "strings"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/service/appstream"
 	"github.com/aws/aws-sdk-go/service/imagebuilder"
 	awsbase "github.com/hashicorp/aws-sdk-go-base"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/logging"
+	"fmt"
+	"log"
 )
 
 
@@ -31,9 +30,8 @@ type Config struct {
         ForbiddenAccountIds []string
 
         Endpoints        map[string]string
-        IgnoreTagsConfig []string
-		IgnoreTagPrefixes []string
-		IgnoreTags        []string
+	IgnoreTagPrefixes []string
+	IgnoreTags        []string
         Insecure         bool
 
         SkipCredsValidation     bool

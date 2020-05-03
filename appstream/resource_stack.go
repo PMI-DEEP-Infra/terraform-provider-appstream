@@ -1,12 +1,11 @@
 package appstream
 
 import (
-	"log"
-	"time"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/appstream"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+        "log"
+        "time"
 )
 
 func resourceAppstreamStack() *schema.Resource {
