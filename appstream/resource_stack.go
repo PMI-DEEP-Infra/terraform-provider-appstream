@@ -67,7 +67,7 @@ func resourceAppstreamStack() *schema.Resource {
 
 func resourceAppstreamStackCreate(d *schema.ResourceData, meta interface{}) error {
 
-	svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
 	CreateStackInputOpts := &appstream.CreateStackInput{}
 
@@ -149,7 +149,7 @@ func resourceAppstreamStackCreate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceAppstreamStackRead(d *schema.ResourceData, meta interface{}) error {
 
-	svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
 	resp, err := svc.DescribeStacks(&appstream.DescribeStacksInput{})
 	if err != nil {
@@ -212,7 +212,7 @@ func resourceAppstreamStackRead(d *schema.ResourceData, meta interface{}) error 
 
 func resourceAppstreamStackUpdate(d *schema.ResourceData, meta interface{}) error {
 
-	svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
 	UpdateStackInputOpts := &appstream.UpdateStackInput{}
 
@@ -264,7 +264,7 @@ func resourceAppstreamStackUpdate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceAppstreamStackDelete(d *schema.ResourceData, meta interface{}) error {
 
-	svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
 	resp, err := svc.DeleteStack(&appstream.DeleteStackInput{
 		Name: aws.String(d.Id()),

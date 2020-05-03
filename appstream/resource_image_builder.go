@@ -98,7 +98,7 @@ func resourceAppstreamImageBuilder() *schema.Resource {
 
 func resourceAppstreamImageBuilderCreate(d *schema.ResourceData, meta interface{}) error {
 
-    svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
     CreateImageBuilderInputOpts := &appstream.CreateImageBuilderInput{}
 
@@ -208,7 +208,7 @@ func resourceAppstreamImageBuilderCreate(d *schema.ResourceData, meta interface{
 
 func resourceAppstreamImageBuilderRead(d *schema.ResourceData, meta interface{}) error {
 
-    svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
     resp, err := svc.DescribeImageBuilders(&appstream.DescribeImageBuildersInput{})
     if err != nil {
@@ -248,7 +248,7 @@ func resourceAppstreamImageBuilderRead(d *schema.ResourceData, meta interface{})
 // Apstream2.0 doesn't support imageBuilder updates
 func resourceAppstreamImageBuilderUpdate(d *schema.ResourceData, meta interface{}) error {
 
-    svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
     StartImageBuilderInputOptions := &appstream.StartImageBuilderInput{}
     StopImageBuilderInputOptions := &appstream.StopImageBuilderInput{}
@@ -299,7 +299,7 @@ func resourceAppstreamImageBuilderUpdate(d *schema.ResourceData, meta interface{
 }
 
 func resourceAppstreamImageBuilderDelete(d *schema.ResourceData, meta interface{}) error {
-    svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
     ImageBuilderName := d.Id()
 

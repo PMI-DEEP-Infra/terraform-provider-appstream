@@ -132,7 +132,7 @@ func resourceAppstreamFleet() *schema.Resource {
 
 func resourceAppstreamFleetCreate(d *schema.ResourceData, meta interface{}) error {
 
-	svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 	CreateFleetInputOpts := &appstream.CreateFleetInput{}
 
 	if v, ok := d.GetOk("name"); ok {
@@ -323,7 +323,7 @@ func resourceAppstreamFleetCreate(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceAppstreamFleetRead(d *schema.ResourceData, meta interface{}) error {
-	svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
 	resp, err := svc.DescribeFleets(&appstream.DescribeFleetsInput{})
 
@@ -392,7 +392,7 @@ func resourceAppstreamFleetRead(d *schema.ResourceData, meta interface{}) error 
 
 func resourceAppstreamFleetUpdate(d *schema.ResourceData, meta interface{}) error {
 
-    svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
     UpdateFleetInputOpts := &appstream.UpdateFleetInput{}
 
     d.Partial(true)
@@ -510,7 +510,7 @@ func resourceAppstreamFleetUpdate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceAppstreamFleetDelete(d *schema.ResourceData, meta interface{}) error {
 
-    svc := meta.(*AwsClient).appstream
+	svc := meta.(*AWSClient).appstreamconn
 
     resp, err := svc.DescribeFleets(&appstream.DescribeFleetsInput{
 	    Names: aws.StringSlice([]string{*aws.String(d.Id())}),
