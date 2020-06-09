@@ -1,3 +1,14 @@
+## 1.0.7 (June 9, 2020)
+
+FEATURES:
+* Added support for role ARN
+
+ENHANCEMENTS:
+
+BUGFIXES:
+
+Patch by: Konstantin Odnoralov <kodnoral@pmintl.net>
+
 ## 1.0.6 (May 27, 2020)
 
 FEATURES:
