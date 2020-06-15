@@ -1,8 +1,11 @@
-## 1.0.8 (UNRELEASED)
+## 1.0.8 (June 15, 2020)
 
 FEATURES:
+* appstream/resource_stack.go - user_settings patch from dhruv2511
 
 ENHANCEMENTS:
+* Upgraded modules
+* Updated examples
 
 BUGFIXES:
 
