@@ -12,7 +12,7 @@ $ terraform apply
 ```
 
 #Development notes
-Several other terraform provider projects have been used to refrence how a module should be written,
+Several other terraform provider projects have been used to reference how a module should be written,
 The goal of this version is to be able to run properly with Terraform Cloud and Terraform Enterprise.
 Along side with removing the need for access and secret key in variables and only pass the necessary
 to be assumed.
@@ -24,6 +24,9 @@ https://github.com/terraform-providers/terraform-provider-aws
 
 
 ## Authors/Contributors/Forks
+Contributors:
+- [Jorge Canha](jorge.canha@pmi.com)
+
 This fork is by:
 [Arnvid Karstad](https://github.com/arnvid)
 

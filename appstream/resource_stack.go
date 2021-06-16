@@ -1,11 +1,12 @@
 package appstream
 
 import (
+	"log"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/appstream"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-        "log"
-        "time"
 )
 
 func resourceAppstreamStack() *schema.Resource {
@@ -61,29 +62,17 @@ func resourceAppstreamStack() *schema.Resource {
 				Optional: true,
 			},
 			"user_settings": {
-				Type: schema.TypeSet,
+				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"file_download":{
-							Type: schema.TypeString,
-							Optional: true,
+						"action": {
+							Type:     schema.TypeString,
+							Required: true,
 						},
-						"file_upload":{
-							Type: schema.TypeString,
-							Optional: true,
-						},
-						"copy_from_local": {
-							Type: schema.TypeString,
-							Optional: true,
-						},
-						"copy_to_local": {
-							Type: schema.TypeString,
-							Optional: true,
-						},
-						"allow_local_device_printing": {
-							Type: schema.TypeString,
-							Optional: true,
+						"enabled": {
+							Type:     schema.TypeBool,
+							Required: true,
 						},
 					},
 				},
@@ -213,6 +202,25 @@ func resourceAppstreamStackRead(d *schema.ResourceData, meta interface{}) error 
 				}
 			}
 
+			us_list := v.UserSettings
+			us_res := make([]map[string]interface{}, 0)
+
+			for _, us := range us_list {
+				us_attr := map[string]interface{}{}
+				us_attr["action"] = aws.StringValue(us.Action)
+				us_attr["enabled"] = (aws.StringValue(us.Permission) == appstream.PermissionEnabled)
+				us_res = append(us_res, us_attr)
+			}
+
+			if len(us_res) > 0 {
+				if err := d.Set("user_settings", us_res); err != nil {
+					log.Printf("[ERROR] Error setting user settings: %s", err)
+					return err
+				}
+			}
+
+			log.Printf("Dump of settings %+v", d.Get("user_settings"))
+
 			tg, err := svc.ListTagsForResource(&appstream.ListTagsForResourceInput{
 				ResourceArn: v.Arn,
 			})
@@ -243,7 +251,6 @@ func resourceAppstreamStackRead(d *schema.ResourceData, meta interface{}) error 
 }
 
 func resourceAppstreamStackUpdate(d *schema.ResourceData, meta interface{}) error {
-
 	svc := meta.(*AWSClient).appstreamconn
 
 	UpdateStackInputOpts := &appstream.UpdateStackInput{}
@@ -280,6 +287,12 @@ func resourceAppstreamStackUpdate(d *schema.ResourceData, meta interface{}) erro
 		log.Printf("[DEBUG] Modify appstream stack")
 		redirecturl := d.Get("redirect_url").(string)
 		UpdateStackInputOpts.RedirectURL = aws.String(redirecturl)
+	}
+
+	if d.HasChange("user_settings") {
+		log.Printf("[DEBUG] Modify appstream stack")
+		userSettingConfigs := d.Get("user_settings").(*schema.Set).List()
+		UpdateStackInputOpts.UserSettings = expandUserSettingConfigs(userSettingConfigs)
 	}
 
 	resp, err := svc.UpdateStack(UpdateStackInputOpts)
@@ -325,51 +338,21 @@ func expandStorageConnectorConfigs(storageConnectorConfigs []interface{}) []*app
 }
 
 func expandUserSettingConfigs(userSettingConfigs []interface{}) []*appstream.UserSetting {
-	userSettingConfig := []*appstream.UserSetting{}
+	userSettingList := []*appstream.UserSetting{}
 
 	for _, raw := range userSettingConfigs {
 		configAttributes := raw.(map[string]interface{})
-		configFileDownload := configAttributes["file_download"].(string)
-		configFileUpload := configAttributes["file_upload"].(string)
-		configCopyFromLocal := configAttributes["copy_from_local"].(string)
-		configCopytoLocal := configAttributes["copy_to_local"].(string)
-		configAllowLocalPrint := configAttributes["allow_local_device_printing"].(string)
-		if configAttributes["file_download"] != nil {
-			config := &appstream.UserSetting{
-				Action: aws.String("FILE_DOWNLOAD"),
-				Permission: aws.String(configFileDownload),
-			}
-			userSettingConfig = append(userSettingConfig, config)
+		action := configAttributes["action"].(string)
+		enabled := configAttributes["enabled"].(bool)
+		permission := appstream.PermissionDisabled
+		if enabled {
+			permission = appstream.PermissionEnabled
 		}
-		if configAttributes["file_upload"] != nil {
-			config := &appstream.UserSetting{
-				Action: aws.String("FILE_UPLOAD"),
-				Permission: aws.String(configFileUpload),
-			}
-			userSettingConfig = append(userSettingConfig, config)
+		config := &appstream.UserSetting{
+			Action:     aws.String(action),
+			Permission: aws.String(permission),
 		}
-		if configAttributes["copy_from_local"] != nil {
-			config := &appstream.UserSetting{
-				Action: aws.String("CLIPBOARD_COPY_FROM_LOCAL_DEVICE"),
-				Permission: aws.String(configCopyFromLocal),
-			}
-			userSettingConfig = append(userSettingConfig, config)
-		}
-		if configAttributes["copy_to_local"] != nil {
-			config := &appstream.UserSetting{
-				Action: aws.String("CLIPBOARD_COPY_TO_LOCAL_DEVICE"),
-				Permission: aws.String(configCopytoLocal),
-			}
-			userSettingConfig = append(userSettingConfig, config)
-		}
-		if configAttributes["allow_local_device_printing"] != nil {
-			config := &appstream.UserSetting{
-				Action: aws.String("PRINTING_TO_LOCAL_DEVICE"),
-				Permission: aws.String(configAllowLocalPrint),
-			}
-			userSettingConfig = append(userSettingConfig, config)
-		}
-
+		userSettingList = append(userSettingList, config)
 	}
-	return userSettingConfig
+	return userSettingList
 }
