@@ -3,7 +3,6 @@
 
 
 # Provider usage
-
 ```
 $ go build -o terraform-provider-appstream
 $ terraform init
@@ -22,12 +21,6 @@ https://github.com/terraform-providers/terraform-provider-aws
 
 
 ## Authors/Contributors/Forks
-Contributors:
-- [Jorge Canha](jorge.canha@pmi.com)
-
-This fork is by:
-[Arnvid Karstad](https://github.com/arnvid)
-
 Original code from:
 https://github.com/ops-guru/terraform-provider-appstream
 [Viktor Berlov](https://github.com/vktr-brlv)
@@ -35,3 +28,9 @@ https://github.com/ops-guru/terraform-provider-appstream
 Other forks ref'd:
 https://github.com/bluesentry/terraform-provider-appstream
 [Chris Mackubin](https://github.com/chris-mackubin)
+
+https://github.com/arnvid/terraform-provider-appstream
+[Arnvid Karstad](https://github.com/arnvid)
+
+https://github.com/wrschneider/terraform-provider-aws/tree/appstream-stack
+[Bill Schneider](https://github.com/wrschneider)
