@@ -75,13 +75,13 @@ func resourceAppstreamFleet() *schema.Resource {
                 Type:         schema.TypeString,
                 Optional:     true,
             },
-			
+
 			"image_arn": {
                 Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:	  true,
 			},
-			
+
 			"iam_role_arn": {
                 Type:         schema.TypeString,
 				Required:     true,
@@ -441,7 +441,7 @@ func resourceAppstreamFleetUpdate(d *schema.ResourceData, meta interface{}) erro
         image_arn :=d.Get("image_arn").(string)
         UpdateFleetInputOpts.ImageArn = aws.String(image_arn)
 	}
-	
+
 	if d.HasChange("iam_role_arn") {
         d.SetPartial("iam_role_arn")
         log.Printf("[DEBUG] Modify Fleet")
@@ -467,7 +467,16 @@ func resourceAppstreamFleetUpdate(d *schema.ResourceData, meta interface{}) erro
 
     if err != nil {
         log.Printf("[ERROR] Error updating Appstream Fleet: %s", err)
-	return err
+	      return err
+    }
+
+    if d.HasChange("tags") {
+      arn := aws.StringValue(resp.Fleet.Arn)
+
+      o, n := d.GetChange("tags")
+      if err := UpdateTags(svc, arn, o, n); err != nil {
+        return err
+      }
     }
     log.Printf("[DEBUG] %s", resp)
     desired_state := d.Get("state")
