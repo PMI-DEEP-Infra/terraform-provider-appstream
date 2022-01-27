@@ -302,6 +302,17 @@ func resourceAppstreamStackUpdate(d *schema.ResourceData, meta interface{}) erro
 		return err
 	}
 	log.Printf("[DEBUG] %s", resp)
+
+
+	if d.HasChange("tags") {
+		arn := aws.StringValue(resp.Stack.Arn)
+
+		o, n := d.GetChange("tags")
+		if err := UpdateTags(svc, arn, o, n); err != nil {
+			return err
+		}
+	}
+
 	d.Partial(false)
 	return nil
 
